@@ -13,8 +13,10 @@ public class Player {
     private Bitmap image;
     private Rect hitbox;
 
-    private int xPosition;
-    private int yPosition;
+    public int xPosition;
+    public int yPosition;
+    public int width;
+    private int speed;
 
     private ArrayList<Rect> bullets = new ArrayList<Rect>();
     private final int BULLET_WIDTH = 5;
@@ -35,6 +37,29 @@ public class Player {
                 this.xPosition + this.image.getWidth(),
                 this.yPosition + this.image.getHeight()
         );
+    }
+
+    public Player(Context context, int x, int y, int width, int speed) {
+        this.xPosition = x;
+        this.yPosition = y;
+        this.width = width;
+        this.speed = speed;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public ArrayList<Rect> getBullets() {

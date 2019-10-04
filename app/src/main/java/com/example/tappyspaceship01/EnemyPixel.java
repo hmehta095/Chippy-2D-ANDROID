@@ -29,6 +29,8 @@ public class EnemyPixel {
 
     }
 
+
+
     public Bitmap getImage() {
         return image;
     }
