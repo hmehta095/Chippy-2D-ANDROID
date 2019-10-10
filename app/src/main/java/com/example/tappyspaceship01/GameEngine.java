@@ -1,6 +1,7 @@
 package com.example.tappyspaceship01;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -44,6 +45,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     int blocklive = 10;
 
     Player player;
+    int lives = 10;
 
     int SKULL_LIVE = 20;
 
@@ -321,6 +323,47 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
                 }
+
+                if (this.enemyPixels[j].getHitbox().intersect(player.getHitbox())){
+                    lives = lives-1;
+                    this.player = new Player(getContext(),100,100);
+                    enemyPixels[j].updateHitbox();
+
+                }
+
+            }
+            for (int j = 0; j < enemyBulletY.length;j++)
+            {
+
+                if (this.enemyBulletY[j].getHitbox().intersect(player.getHitbox())){
+                    lives = lives-1;
+                    this.player = new Player(getContext(),100,100);
+                    enemyBulletY[j].updateHitbox();
+                    this.mouseX=100;
+                    this.mouseY=100;
+
+                }
+
+            }
+            for (int j = 0; j < enemyBullet.length;j++)
+            {
+
+                if (this.enemyBullet[j].getHitbox().intersect(player.getHitbox())){
+                    lives = lives-1;
+                    this.player = new Player(getContext(),100,600);
+                    enemyBullet[j].updateHitbox();
+                    this.mouseX=100;
+                    this.mouseY=600;
+
+
+
+                }
+
+            }
+
+            if(SKULL_LIVE<1){
+                Intent intent = new Intent(this.getContext(),Win.class);
+                this.getContext().startActivity(intent);
             }
 
         }
@@ -437,6 +480,9 @@ public class GameEngine extends SurfaceView implements Runnable {
                 canvas.drawRect(enemyBulletY[i].getHitbox(), paintbrush);
             }
 
+
+            paintbrush.setTextSize(55);
+            canvas.drawText("Lives Remaining: " + lives,this.screenWidth-550,80,paintbrush);
 
 
 //            paintbrush.setColor(Color.RED);
