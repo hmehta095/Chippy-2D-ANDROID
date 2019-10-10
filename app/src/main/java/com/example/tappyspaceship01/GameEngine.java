@@ -365,6 +365,10 @@ public class GameEngine extends SurfaceView implements Runnable {
                 Intent intent = new Intent(this.getContext(),Win.class);
                 this.getContext().startActivity(intent);
             }
+            if(lives<1){
+                Intent intent = new Intent(this.getContext(),LoseScreen.class);
+                this.getContext().startActivity(intent);
+            }
 
         }
 
