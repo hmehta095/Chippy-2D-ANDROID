@@ -8,6 +8,7 @@ import android.graphics.Rect;
 public class EnemyPixel {
     private Bitmap image;
     private Rect hitbox;
+    private Bitmap image1;
 
     private int xPosition;
     private int yPosition;
@@ -19,6 +20,10 @@ public class EnemyPixel {
         // 2. Set the default image - all enemies have same image
         this.image = BitmapFactory.decodeResource(context.getResources(), R.drawable.architectonic);
 
+        this.image1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion3);
+
+
+
         // 3. Set the default hitbox - all enemies have same hitbox
         this.hitbox = new Rect(
                 this.xPosition,
@@ -29,7 +34,13 @@ public class EnemyPixel {
 
     }
 
+    public Bitmap getImage1() {
+        return image1;
+    }
 
+    public void setImage1(Bitmap image1) {
+        this.image1 = image1;
+    }
 
     public Bitmap getImage() {
         return image;

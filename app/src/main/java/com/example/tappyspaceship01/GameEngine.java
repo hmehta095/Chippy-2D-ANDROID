@@ -58,6 +58,9 @@ public class GameEngine extends SurfaceView implements Runnable {
     // GAME SPECIFIC VARIABLES
     // -----------------------------------
         EnemyPixel[] enemyPixels = new EnemyPixel[35];
+
+        EnemyPixel[] enemyBullet = new EnemyPixel[8];
+        EnemyPixel[] enemyBulletY = new EnemyPixel[15];
         EnemyPixel skull;
     // ----------------------------
     // ## SPRITES
@@ -97,6 +100,29 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         this.printScreenInfo();
         int xVal = 90,yVal = 100;
+
+        for(int i = 0 ; i< enemyBullet.length;i++){
+            if(i<5) {
+                this.enemyBullet[i] = new EnemyPixel(getContext(), 4000, yVal + 100 * i);
+            }
+            else {
+                this.enemyBullet[i] = new EnemyPixel(getContext(), 4000, 300 + 100 * i);
+
+            }
+        }
+
+        for(int i = 0 ; i< enemyBulletY.length;i++){
+            if(i<5) {
+                this.enemyBulletY[i] = new EnemyPixel(getContext(), xVal+100*i, -4000);
+            }
+            else {
+                this.enemyBulletY[i] = new EnemyPixel(getContext(), 400+100*i, -4000);
+
+            }
+        }
+
+
+
         for (int i = 0; i < enemyPixels.length; i++) {
 
 
@@ -267,6 +293,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             if (this.skull.getHitbox().intersect(bullet)){
                SKULL_LIVE = SKULL_LIVE-1;
+               skull.updateHitbox();
 
                if (SKULL_LIVE < 1){
                    this.skull =  new EnemyPixel(getContext(), -100 , -100);
@@ -304,6 +331,47 @@ public class GameEngine extends SurfaceView implements Runnable {
 //            Player b = this.bullets.get(i);
 //            moveBulletToMouse(b, this.mouseX, this.mouseY);
 //        }
+
+
+//        if(blocklive < 5){
+//            for(int i = 0 ; i< enemyBullet.length;i++){
+//
+//                this.enemyBullet[i] = new EnemyPixel(getContext(), 1000-10 , 100+100*i);
+//
+//            }
+//        }
+
+
+//          move enemy bullet right to left
+
+//        if (blocklive<8) {
+
+            for (int i = 0; i < this.enemyBullet.length; i++) {
+                EnemyPixel image = this.enemyBullet[i];
+                image.setxPosition(image.getxPosition() - 20);
+                image.updateHitbox();
+
+                if (image.getxPosition()<0){
+                    image.setxPosition(screenWidth+1000);
+                    image.updateHitbox();
+                }
+            }
+//        }
+
+
+//              move enemy bullet top to bottom
+        for (int i = 0; i < this.enemyBulletY.length; i++) {
+            EnemyPixel image = this.enemyBulletY[i];
+            image.setyPosition(image.getyPosition() + 20);
+            image.updateHitbox();
+
+            if (image.getyPosition()>screenHeight){
+                image.setyPosition(-4000);
+                image.updateHitbox();
+            }
+        }
+
+
 
 
     }
@@ -355,11 +423,30 @@ public class GameEngine extends SurfaceView implements Runnable {
                 // draw the player's hitbox
                 canvas.drawRect(enemyPixels[i].getHitbox(), paintbrush);
             }
+
+            for (int i =0; i<enemyBullet.length;i++)
+            {
+                canvas.drawBitmap(enemyBullet[i].getImage1(), enemyBullet[i].getxPosition(), enemyBullet[i].getyPosition(), paintbrush);
+                // draw the player's hitbox
+                canvas.drawRect(enemyBullet[i].getHitbox(), paintbrush);
+            }
+            for (int i =0; i<enemyBulletY.length;i++)
+            {
+                canvas.drawBitmap(enemyBulletY[i].getImage1(), enemyBulletY[i].getxPosition(), enemyBulletY[i].getyPosition(), paintbrush);
+                // draw the player's hitbox
+                canvas.drawRect(enemyBulletY[i].getHitbox(), paintbrush);
+            }
+
+
+
 //            paintbrush.setColor(Color.RED);
             canvas.drawBitmap(skull.getImage(), skull.getxPosition(), skull.getyPosition(), paintbrush);
             // draw the player's hitbox
             skull.setImage(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.skull));
             canvas.drawRect(skull.getHitbox(), paintbrush);
+
+
+
 
 //            paintbrush.setColor(Color.BLACK);
             canvas.drawBitmap(player.getImage(), player.getxPosition(), player.getyPosition(), paintbrush);
