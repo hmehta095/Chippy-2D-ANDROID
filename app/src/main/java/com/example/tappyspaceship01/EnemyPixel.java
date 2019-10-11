@@ -8,6 +8,7 @@ import android.graphics.Rect;
 public class EnemyPixel {
     private Bitmap image;
     private Rect hitbox;
+    private Rect bulletHitbox;
     private Bitmap image1;
 
     private int xPosition;
@@ -31,7 +32,21 @@ public class EnemyPixel {
                 this.xPosition + this.image.getWidth(),
                 this.yPosition + this.image.getHeight()
         );
+        this.bulletHitbox = new Rect(
+                this.xPosition,
+                this.yPosition,
+                this.xPosition + this.image1.getWidth(),
+                this.yPosition + this.image1.getHeight()
+        );
 
+    }
+
+    public Rect getBulletHitbox() {
+        return bulletHitbox;
+    }
+
+    public void setBulletHitbox(Rect bulletHitbox) {
+        this.bulletHitbox = bulletHitbox;
     }
 
     public Bitmap getImage1() {

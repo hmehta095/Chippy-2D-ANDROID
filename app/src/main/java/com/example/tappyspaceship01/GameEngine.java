@@ -45,14 +45,14 @@ public class GameEngine extends SurfaceView implements Runnable {
     int blocklive = 10;
 
     Player player;
-    int lives = 10;
+    int lives = 3;
 
     int SKULL_LIVE = 20;
 
 //    ArrayList<Player> bullets = new ArrayList<Player>();
 
 
-    Player enemy;
+    Player powerImage;
 
     int SQUARE_WIDTH = 15;
 
@@ -96,6 +96,12 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.bgXPosition = 0;
 
         this.player = new Player(getContext(),100,100);
+
+
+        final int min = 1;
+        final int max = 7;
+        final int random = new Random().nextInt((max - min) + 1) + min;
+        powerImage = new Player(getContext(),random*1000,random*100);
 
 
 
@@ -259,6 +265,9 @@ public class GameEngine extends SurfaceView implements Runnable {
             this.bgXPosition = 0;
         }
 
+        this.powerImage.setxPosition(this.powerImage.getxPosition()-25);
+        this.powerImage.updatepowerHitbox();
+
 
 
 //        Move Player
@@ -355,11 +364,29 @@ public class GameEngine extends SurfaceView implements Runnable {
                     this.mouseX=100;
                     this.mouseY=600;
 
+                }
 
-
+                if(this.enemyBullet[j].getHitbox().intersect(bullet)) {
+                    this.player.getBullets().remove(bullet);
                 }
 
             }
+
+            if(this.powerImage.getxPosition()<0){
+                final int min = 1;
+                final int max = 7;
+                final int random = new Random().nextInt((max - min) + 1) + min;
+                powerImage = new Player(getContext(),random*1000,random*100);
+            }
+
+            if(this.player.getHitbox().intersect(powerImage.getPowerImageHitbox())){
+                lives = lives +5;
+                final int min = 1;
+                final int max = 7;
+                final int random = new Random().nextInt((max - min) + 1) + min;
+                powerImage = new Player(getContext(),random*1000,random*100);
+            }
+
 
             if(SKULL_LIVE<1){
                 Intent intent = new Intent(this.getContext(),Win.class);
@@ -421,6 +448,8 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
 
+
+
     }
 
 
@@ -475,13 +504,13 @@ public class GameEngine extends SurfaceView implements Runnable {
             {
                 canvas.drawBitmap(enemyBullet[i].getImage1(), enemyBullet[i].getxPosition(), enemyBullet[i].getyPosition(), paintbrush);
                 // draw the player's hitbox
-                canvas.drawRect(enemyBullet[i].getHitbox(), paintbrush);
+                canvas.drawRect(enemyBullet[i].getBulletHitbox(), paintbrush);
             }
             for (int i =0; i<enemyBulletY.length;i++)
             {
                 canvas.drawBitmap(enemyBulletY[i].getImage1(), enemyBulletY[i].getxPosition(), enemyBulletY[i].getyPosition(), paintbrush);
                 // draw the player's hitbox
-                canvas.drawRect(enemyBulletY[i].getHitbox(), paintbrush);
+                canvas.drawRect(enemyBulletY[i].getBulletHitbox(), paintbrush);
             }
 
 
@@ -501,6 +530,9 @@ public class GameEngine extends SurfaceView implements Runnable {
 //            paintbrush.setColor(Color.BLACK);
             canvas.drawBitmap(player.getImage(), player.getxPosition(), player.getyPosition(), paintbrush);
             canvas.drawRect(player.getHitbox(), paintbrush);
+
+            canvas.drawBitmap(powerImage.getPowerImage(), powerImage.getxPosition(), powerImage.getyPosition(), paintbrush);
+            canvas.drawRect(powerImage.getPowerImageHitbox(), paintbrush);
 
             // draw bullet on screen
             for (int i = 0; i < this.player.getBullets().size(); i++) {

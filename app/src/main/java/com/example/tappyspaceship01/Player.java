@@ -11,7 +11,9 @@ public class Player {
 
     // PROPERTIES
     private Bitmap image;
+    private Bitmap powerImage;
     private Rect hitbox;
+    private Rect powerImageHitbox;
 
     public int xPosition;
     public int yPosition;
@@ -29,6 +31,7 @@ public class Player {
 
         // 2. Set the default image - all enemies have same image
         this.image = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_ship);
+        this.powerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.life);
 
         // 3. Set the default hitbox - all enemies have same hitbox
         this.hitbox = new Rect(
@@ -37,6 +40,12 @@ public class Player {
                 this.xPosition + this.image.getWidth(),
                 this.yPosition + this.image.getHeight()
         );
+        this.powerImageHitbox = new Rect(
+                this.xPosition,
+                this.yPosition,
+                this.xPosition + this.powerImage.getWidth(),
+                this.yPosition + this.powerImage.getHeight()
+        );
     }
 
     public Player(Context context, int x, int y, int width, int speed) {
@@ -44,6 +53,22 @@ public class Player {
         this.yPosition = y;
         this.width = width;
         this.speed = speed;
+    }
+
+    public Rect getPowerImageHitbox() {
+        return powerImageHitbox;
+    }
+
+    public void setPowerImageHitbox(Rect powerImageHitbox) {
+        this.powerImageHitbox = powerImageHitbox;
+    }
+
+    public Bitmap getPowerImage() {
+        return powerImage;
+    }
+
+    public void setPowerImage(Bitmap powerImage) {
+        this.powerImage = powerImage;
     }
 
     public int getWidth() {
@@ -112,6 +137,12 @@ public class Player {
         this.hitbox.top = this.yPosition;
         this.hitbox.right = this.xPosition + this.image.getWidth();
         this.hitbox.bottom = this.yPosition + this.image.getHeight();
+    }
+    public void updatepowerHitbox() {
+        this.powerImageHitbox.left = this.xPosition;
+        this.powerImageHitbox.top = this.yPosition;
+        this.powerImageHitbox.right = this.xPosition + this.powerImage.getWidth();
+        this.powerImageHitbox.bottom = this.yPosition + this.powerImage.getHeight();
     }
 
     // Make a new bullet
