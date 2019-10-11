@@ -61,8 +61,8 @@ public class GameEngine extends SurfaceView implements Runnable {
     // -----------------------------------
         EnemyPixel[] enemyPixels = new EnemyPixel[35];
 
-        EnemyPixel[] enemyBullet = new EnemyPixel[8];
-        EnemyPixel[] enemyBulletY = new EnemyPixel[15];
+        EnemyPixel[] enemyBullet = new EnemyPixel[15];
+        EnemyPixel[] enemyBulletY = new EnemyPixel[25];
         EnemyPixel skull;
     // ----------------------------
     // ## SPRITES
@@ -136,30 +136,30 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             if (i < 7)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 1000 + i * xVal, yVal);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + i * xVal, yVal);
             }
             if (i >=7 && i< 14 )
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 1000 + (i - 7) * xVal, yVal + 90);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 7) * xVal, yVal + 90);
             }
             if (i >=14 && i <= 21)
             {
                 if (i == 17)
                 {
-                    skull = new EnemyPixel(getContext(),1000 + (i - 14) * xVal, yVal + 180);
+                    skull = new EnemyPixel(getContext(),2000 + (i - 14) * xVal, yVal + 180);
                 }
 
-                    this.enemyPixels[i] = new EnemyPixel(getContext(), 1000 + (i - 14) * xVal, yVal + 180);
+                    this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 14) * xVal, yVal + 180);
 
 
             }
             if (i >=21 && i <= 28)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 1000 + (i - 21) * xVal, yVal + 270);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 21) * xVal, yVal + 270);
             }
             if (i >=28 && i <= enemyPixels.length)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 1000 + (i - 28) * xVal, yVal + 350);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 28) * xVal, yVal + 350);
             }
         }
 
@@ -173,6 +173,12 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         Log.d(TAG, "Screen (w, h) = " + this.screenWidth + "," + this.screenHeight);
     }
+
+
+
+
+
+
 
 
     float mouseX ;
@@ -380,7 +386,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             }
 
             if(this.player.getHitbox().intersect(powerImage.getPowerImageHitbox())){
-                lives = lives +5;
+                lives = lives +1;
                 final int min = 1;
                 final int max = 7;
                 final int random = new Random().nextInt((max - min) + 1) + min;
@@ -430,6 +436,16 @@ public class GameEngine extends SurfaceView implements Runnable {
                     image.updateHitbox();
                 }
             }
+
+
+//      moving the enemy
+        for (int i = 0; i < enemyPixels.length; i++){
+            EnemyPixel image = this.enemyPixels[i];
+            image.setxPosition(image.getxPosition()-1);
+            image.updateHitbox();
+        }
+        skull.setxPosition(skull.getxPosition()-1);
+        skull.updateHitbox();
 //        }
 
 
@@ -514,8 +530,8 @@ public class GameEngine extends SurfaceView implements Runnable {
             }
 
 
-            paintbrush.setTextSize(55);
-            canvas.drawText("Lives Remaining: " + lives,this.screenWidth-550,80,paintbrush);
+//            paintbrush.setTextSize(55);
+//            canvas.drawText("Lives Remaining: " + lives,this.screenWidth-550,80,paintbrush);
 
 
 //            paintbrush.setColor(Color.RED);
@@ -550,6 +566,10 @@ public class GameEngine extends SurfaceView implements Runnable {
 //                        paintbrush
 //                );
 //            }
+
+            paintbrush.setColor(Color.RED);
+            paintbrush.setTextSize(55);
+            canvas.drawText("Lives Remaining: " + lives,this.screenWidth-550,80,paintbrush);
 
             paintbrush.setStyle(Paint.Style.STROKE);
             paintbrush.setStrokeWidth(5);
