@@ -215,8 +215,39 @@ public class GameEngine extends SurfaceView implements Runnable {
 //            this.bullets.add(b);
 //        }
     }
-    private void spawnEnemyShips() {
-        Random random = new Random();
+    private void reSpawnEnemy() {
+        int xVal = 90,yVal = 100;
+        for (int i = 0; i < enemyPixels.length; i++) {
+
+
+            if (i < 7)
+            {
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + i * xVal, yVal);
+            }
+            if (i >=7 && i< 14 )
+            {
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 7) * xVal, yVal + 90);
+            }
+            if (i >=14 && i <= 21)
+            {
+                if (i == 17)
+                {
+                    skull = new EnemyPixel(getContext(),2000 + (i - 14) * xVal, yVal + 180);
+                }
+
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 14) * xVal, yVal + 180);
+
+
+            }
+            if (i >=21 && i <= 28)
+            {
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 21) * xVal, yVal + 270);
+            }
+            if (i >=28 && i <= enemyPixels.length)
+            {
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 28) * xVal, yVal + 350);
+            }
+        }
 
         //@TODO: Place the enemies in a random location
 
@@ -443,22 +474,21 @@ public class GameEngine extends SurfaceView implements Runnable {
 //      moving the enemy
         for (int i = 0; i < enemyPixels.length; i++){
             EnemyPixel image = this.enemyPixels[i];
-            image.setxPosition(image.getxPosition()-1);
-            image.setyPosition(image.getyPosition()+1);
+            image.setyPosition(image.getyPosition()+2);
             image.updateHitbox();
 
-            if (image.getxPosition()<0 || image.getyPosition()>screenHeight){
+            if (image.getyPosition()>screenHeight){
 
                 image.setyPosition(0);
-//                image.setxPosition(1000);
+//
                 image.updateHitbox();
             }
         }
-        skull.setxPosition(skull.getxPosition()-1);
-        skull.setyPosition(skull.getyPosition()+1);
-        if (skull.getyPosition()>screenHeight || skull.getxPosition()<0){
+
+        skull.setyPosition(skull.getyPosition()+2);
+        if (skull.getyPosition()>screenHeight){
             skull.setyPosition(0);
-//            skull.setxPosition(1000);
+//
         }
         skull.updateHitbox();
 //        }
