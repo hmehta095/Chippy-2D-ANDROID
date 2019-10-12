@@ -311,6 +311,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             if (this.skull.getHitbox().intersect(bullet)){
                SKULL_LIVE = SKULL_LIVE-1;
                skull.updateHitbox();
+                this.player.getBullets().remove(bullet);
 
                if (SKULL_LIVE < 1){
                    this.skull =  new EnemyPixel(getContext(), -100 , -100);
@@ -333,7 +334,8 @@ public class GameEngine extends SurfaceView implements Runnable {
 
                     }
                     if(blocklive<10 && blocklive > 1  ){
-                    enemyPixels[j].updateHitbox();}
+                        enemyPixels[j].updateHitbox();
+                    }
                     this.player.getBullets().remove(bullet);
 
 
@@ -442,9 +444,22 @@ public class GameEngine extends SurfaceView implements Runnable {
         for (int i = 0; i < enemyPixels.length; i++){
             EnemyPixel image = this.enemyPixels[i];
             image.setxPosition(image.getxPosition()-1);
+            image.setyPosition(image.getyPosition()+1);
             image.updateHitbox();
+
+            if (image.getxPosition()<0 || image.getyPosition()>screenHeight){
+
+                image.setyPosition(0);
+//                image.setxPosition(1000);
+                image.updateHitbox();
+            }
         }
         skull.setxPosition(skull.getxPosition()-1);
+        skull.setyPosition(skull.getyPosition()+1);
+        if (skull.getyPosition()>screenHeight || skull.getxPosition()<0){
+            skull.setyPosition(0);
+//            skull.setxPosition(1000);
+        }
         skull.updateHitbox();
 //        }
 
@@ -454,7 +469,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             EnemyPixel image = this.enemyBulletY[i];
             image.setyPosition(image.getyPosition() + 20);
             image.updateHitbox();
-
+            // if enemy bullet go off the screen create again
             if (image.getyPosition()>screenHeight){
                 image.setyPosition(-4000);
                 image.updateHitbox();
