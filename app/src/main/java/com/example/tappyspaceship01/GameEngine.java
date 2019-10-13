@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -104,7 +105,9 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         this.bgXPosition = 0;
 
-        this.player = new Player(getContext(),100,100);
+        this.player = new Player(getContext(),600,600);
+        this.mouseX=600;
+        this.mouseY=600;
 
 
         final int random = new Random().nextInt((max - min) + 1) + min;
@@ -272,6 +275,11 @@ public class GameEngine extends SurfaceView implements Runnable {
     int numLoops = 0;
 
     public void updatePositions() {
+
+        if(numLoops%266==0){
+        MediaPlayer mediaPlayer= MediaPlayer.create(getContext(),R.raw.music);
+        mediaPlayer.start();
+        }
 
         timeElapsed = timeElapsed + 1;
         // UPDATE BACKGROUND POSITION

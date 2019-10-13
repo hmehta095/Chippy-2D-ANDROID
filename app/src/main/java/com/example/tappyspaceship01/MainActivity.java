@@ -1,6 +1,7 @@
 package com.example.tappyspaceship01;
 
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Make GameEngine the view of the Activity
         setContentView(tappySpaceship);
+
+
     }
 
     // Android Lifecycle function
