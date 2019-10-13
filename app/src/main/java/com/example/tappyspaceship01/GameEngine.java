@@ -60,7 +60,10 @@ public class GameEngine extends SurfaceView implements Runnable {
     Player gunImage;
 
 
-    int SQUARE_WIDTH = 15;
+
+    final int min = 1;
+    final int max = 7;
+
 
     // -----------------------------------
     // GAME SPECIFIC VARIABLES
@@ -104,13 +107,11 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.player = new Player(getContext(),100,100);
 
 
-        final int min = 1;
-        final int max = 7;
         final int random = new Random().nextInt((max - min) + 1) + min;
-        powerImage = new Player(getContext(),random*1000,random*100);
+        powerImage = new Player(getContext(),screenWidth+random*500,random*100);
 
         final int rand = new Random().nextInt((max - min) + 1) + min;
-        gunImage = new Player(getContext(),rand*1000,rand*200);
+        gunImage = new Player(getContext(),screenWidth+rand*500,rand*200);
 
 
 
@@ -259,6 +260,14 @@ public class GameEngine extends SurfaceView implements Runnable {
     // - update, draw, setFPS
     // ------------------------------
 
+    public void reCreatePlayer(){
+        lives = lives-1;
+        this.player = new Player(getContext(),600,600);
+        this.mouseX=600;
+        this.mouseY=600;
+        Player_Bullet_Speed = 5;
+    }
+
 
     int numLoops = 0;
 
@@ -351,10 +360,9 @@ public class GameEngine extends SurfaceView implements Runnable {
                 }
 
                 if (this.enemyPixels[j].getHitbox().intersect(player.getHitbox())){
-                    lives = lives-1;
-                    this.player = new Player(getContext(),100,100);
+                    reCreatePlayer();
                     enemyPixels[j].updateHitbox();
-                    Player_Bullet_Speed = 5;
+
 
                 }
 
@@ -363,12 +371,8 @@ public class GameEngine extends SurfaceView implements Runnable {
             {
 
                 if (this.enemyBulletY[j].getHitbox().intersect(player.getHitbox())){
-                    lives = lives-1;
-                    this.player = new Player(getContext(),100,100);
+                    reCreatePlayer();
                     enemyBulletY[j].updateHitbox();
-                    this.mouseX=100;
-                    this.mouseY=100;
-                    Player_Bullet_Speed = 5;
 
                 }
 
@@ -377,12 +381,9 @@ public class GameEngine extends SurfaceView implements Runnable {
             {
 
                 if (this.enemyBullet[j].getHitbox().intersect(player.getHitbox())){
-                    lives = lives-1;
-                    this.player = new Player(getContext(),100,600);
+                    reCreatePlayer();
                     enemyBullet[j].updateHitbox();
-                    this.mouseX=100;
-                    this.mouseY=600;
-                    Player_Bullet_Speed = 5;
+
 
                 }
 
@@ -392,39 +393,29 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             }
 
-//            generating power again if it went off the sreen
+//            generating power again at random x,y axis if it went off the screen
+            final int random = new Random().nextInt((max - min) + 1) + min;
+            final int rand = new Random().nextInt((max - min) + 1) + min;
             if(this.powerImage.getxPosition()<0){
-                final int min = 1;
-                final int max = 7;
-                final int random = new Random().nextInt((max - min) + 1) + min;
-                powerImage = new Player(getContext(),random*1000,random*100);
+                powerImage = new Player(getContext(),screenWidth+random*500,random*100);
             }
 
             if(this.gunImage.getxPosition()<0){
-                final int min = 1;
-                final int max = 7;
-
-                final int rand = new Random().nextInt((max - min) + 1) + min;
-                gunImage = new Player(getContext(),rand*1000,rand*200);
+                gunImage = new Player(getContext(),screenWidth+rand*500,rand*200);
 
             }
 
             if(this.player.getHitbox().intersect(powerImage.getPowerImageHitbox())){
                 lives = lives +1;
-                final int min = 1;
-                final int max = 7;
-                final int random = new Random().nextInt((max - min) + 1) + min;
-                powerImage = new Player(getContext(),random*1000,random*100);
+
+                powerImage = new Player(getContext(),screenWidth+random*500,random*100);
             }
 
             if(this.player.getHitbox().intersect(gunImage.getHitbox())){
                 if(Player_Bullet_Speed>1){
                     Player_Bullet_Speed =Player_Bullet_Speed-1;
                 }
-                final int min = 1;
-                final int max = 7;
-                final int rand = new Random().nextInt((max - min) + 1) + min;
-                gunImage = new Player(getContext(),rand*1000,rand*200);
+                gunImage = new Player(getContext(),screenWidth+rand*500,rand*200);
             }
 
 
@@ -440,25 +431,8 @@ public class GameEngine extends SurfaceView implements Runnable {
         }
 
 
-
-//        for (int i = 0; i < this.bullets.size();i++) {
-//            Player b = this.bullets.get(i);
-//            moveBulletToMouse(b, this.mouseX, this.mouseY);
-//        }
-
-
-//        if(blocklive < 5){
-//            for(int i = 0 ; i< enemyBullet.length;i++){
-//
-//                this.enemyBullet[i] = new EnemyPixel(getContext(), 1000-10 , 100+100*i);
-//
-//            }
-//        }
-
-
 //          move enemy bullet right to left
 
-//        if (blocklive<8) {
 
             for (int i = 0; i < this.enemyBullet.length; i++) {
                 EnemyPixel image = this.enemyBullet[i];
@@ -489,10 +463,9 @@ public class GameEngine extends SurfaceView implements Runnable {
         skull.setyPosition(skull.getyPosition()+2);
         if (skull.getyPosition()>screenHeight){
             skull.setyPosition(0);
-//
         }
         skull.updateHitbox();
-//        }
+
 
 
 //              move enemy bullet top to bottom
@@ -610,17 +583,7 @@ public class GameEngine extends SurfaceView implements Runnable {
                 Rect bullet = this.player.getBullets().get(i);
                 canvas.drawRect(bullet, paintbrush);
             }
-//
-//            for (int i = 0; i < this.bullets.size();i++) {
-//                Player b = this.bullets.get(i);
-//                canvas.drawRect(
-//                        b.getxPosition(),
-//                        b.getyPosition(),
-//                        b.getxPosition() + b.getWidth(),
-//                        b.getyPosition() + b.getWidth(),
-//                        paintbrush
-//                );
-//            }
+
 
             paintbrush.setColor(Color.RED);
             paintbrush.setTextSize(55);
@@ -656,24 +619,13 @@ public class GameEngine extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent event) {
         int userAction = event.getActionMasked();
         //@TODO: What should happen when person touches the screen?
-//        float fingerXPosition = event.getX();
-//        float fingerYPosition = event.getY();
+
         if (userAction == MotionEvent.ACTION_DOWN) {
 
             this.mouseX = event.getX();
             this.mouseY = event.getY();
 
-//            if(fingerYPosition <= this.screenHeight/2){
-//                //move racket left
-//                player.setyPosition(player.getyPosition() - 100);
-//                player.updateHitbox();
-//
-//            }
-//            else if(fingerYPosition > this.screenHeight/2){
-//                //move racket right
-//                player.setyPosition(player.getyPosition() + 100);
-//                player.updateHitbox();
-//            }
+
         }
         else if (userAction == MotionEvent.ACTION_UP) {
 
