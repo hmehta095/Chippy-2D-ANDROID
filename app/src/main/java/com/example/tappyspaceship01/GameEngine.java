@@ -47,12 +47,18 @@ public class GameEngine extends SurfaceView implements Runnable {
     Player player;
     int lives = 3;
 
+    int timeElapsed = 0;
+
     int SKULL_LIVE = 20;
+
+    int Player_Bullet_Speed = 5;
 
 //    ArrayList<Player> bullets = new ArrayList<Player>();
 
 
     Player powerImage;
+    Player gunImage;
+
 
     int SQUARE_WIDTH = 15;
 
@@ -84,7 +90,7 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.screenWidth = w;
         this.screenHeight = h;
 
-        this.background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        this.background = BitmapFactory.decodeResource(context.getResources(), R.drawable.back);
 
         this.background = Bitmap.createScaledBitmap(
                 this.background,
@@ -103,6 +109,8 @@ public class GameEngine extends SurfaceView implements Runnable {
         final int random = new Random().nextInt((max - min) + 1) + min;
         powerImage = new Player(getContext(),random*1000,random*100);
 
+        final int rand = new Random().nextInt((max - min) + 1) + min;
+        gunImage = new Player(getContext(),rand*1000,rand*200);
 
 
 
@@ -185,7 +193,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     float mouseY ;
 
 
-    public void moveBulletToMouse(Bitmap bullet, float mouseXPos, float mouseYPos) {
+    public void movePlayer(Bitmap bullet, float mouseXPos, float mouseYPos) {
         // @TODO:  Move the square
         // 1. calculate distance between bullet and square
         double a = (mouseXPos - player.getxPosition());
@@ -215,43 +223,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 //            this.bullets.add(b);
 //        }
     }
-    private void reSpawnEnemy() {
-        int xVal = 90,yVal = 100;
-        for (int i = 0; i < enemyPixels.length; i++) {
 
-
-            if (i < 7)
-            {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + i * xVal, yVal);
-            }
-            if (i >=7 && i< 14 )
-            {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 7) * xVal, yVal + 90);
-            }
-            if (i >=14 && i <= 21)
-            {
-                if (i == 17)
-                {
-                    skull = new EnemyPixel(getContext(),2000 + (i - 14) * xVal, yVal + 180);
-                }
-
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 14) * xVal, yVal + 180);
-
-
-            }
-            if (i >=21 && i <= 28)
-            {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 21) * xVal, yVal + 270);
-            }
-            if (i >=28 && i <= enemyPixels.length)
-            {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 28) * xVal, yVal + 350);
-            }
-        }
-
-        //@TODO: Place the enemies in a random location
-
-    }
 
     // ------------------------------
     // GAME STATE FUNCTIONS (run, stop, start)
@@ -292,23 +264,29 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void updatePositions() {
 
+        timeElapsed = timeElapsed + 1;
         // UPDATE BACKGROUND POSITION
         // 1. Move the background
-        this.bgXPosition = this.bgXPosition - 50;
+//        this.bgXPosition = this.bgXPosition - 5;
+//
+//        backgroundRightSide = this.bgXPosition + this.background.getWidth();
+//        // 2. Background collision detection
+//        if (backgroundRightSide < 0) {
+//            this.bgXPosition = 0;
+//        }
 
-        backgroundRightSide = this.bgXPosition + this.background.getWidth();
-        // 2. Background collision detection
-        if (backgroundRightSide < 0) {
-            this.bgXPosition = 0;
-        }
-
+//        to move player power
         this.powerImage.setxPosition(this.powerImage.getxPosition()-25);
         this.powerImage.updatepowerHitbox();
+
+        this.gunImage.setxPosition(this.gunImage.getxPosition()-25);
+        this.gunImage.updateHitbox();
+
 
 
 
 //        Move Player
-        moveBulletToMouse(player.getImage(), this.mouseX, this.mouseY);
+        movePlayer(player.getImage(), this.mouseX, this.mouseY);
 
 
 
@@ -321,7 +299,7 @@ public class GameEngine extends SurfaceView implements Runnable {
         // DEAL WITH BULLETS
 
         // Shoot a bullet every (5) iterations of the loop
-        if (numLoops % 2  == 0) {
+        if (numLoops % Player_Bullet_Speed  == 0) {
             this.player.spawnBullet();
             spawnPlayer();
         }
@@ -376,6 +354,7 @@ public class GameEngine extends SurfaceView implements Runnable {
                     lives = lives-1;
                     this.player = new Player(getContext(),100,100);
                     enemyPixels[j].updateHitbox();
+                    Player_Bullet_Speed = 5;
 
                 }
 
@@ -389,6 +368,7 @@ public class GameEngine extends SurfaceView implements Runnable {
                     enemyBulletY[j].updateHitbox();
                     this.mouseX=100;
                     this.mouseY=100;
+                    Player_Bullet_Speed = 5;
 
                 }
 
@@ -402,6 +382,7 @@ public class GameEngine extends SurfaceView implements Runnable {
                     enemyBullet[j].updateHitbox();
                     this.mouseX=100;
                     this.mouseY=600;
+                    Player_Bullet_Speed = 5;
 
                 }
 
@@ -411,11 +392,21 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             }
 
+//            generating power again if it went off the sreen
             if(this.powerImage.getxPosition()<0){
                 final int min = 1;
                 final int max = 7;
                 final int random = new Random().nextInt((max - min) + 1) + min;
                 powerImage = new Player(getContext(),random*1000,random*100);
+            }
+
+            if(this.gunImage.getxPosition()<0){
+                final int min = 1;
+                final int max = 7;
+
+                final int rand = new Random().nextInt((max - min) + 1) + min;
+                gunImage = new Player(getContext(),rand*1000,rand*200);
+
             }
 
             if(this.player.getHitbox().intersect(powerImage.getPowerImageHitbox())){
@@ -424,6 +415,16 @@ public class GameEngine extends SurfaceView implements Runnable {
                 final int max = 7;
                 final int random = new Random().nextInt((max - min) + 1) + min;
                 powerImage = new Player(getContext(),random*1000,random*100);
+            }
+
+            if(this.player.getHitbox().intersect(gunImage.getHitbox())){
+                if(Player_Bullet_Speed>1){
+                    Player_Bullet_Speed =Player_Bullet_Speed-1;
+                }
+                final int min = 1;
+                final int max = 7;
+                final int rand = new Random().nextInt((max - min) + 1) + min;
+                gunImage = new Player(getContext(),rand*1000,rand*200);
             }
 
 
@@ -595,6 +596,15 @@ public class GameEngine extends SurfaceView implements Runnable {
             canvas.drawBitmap(powerImage.getPowerImage(), powerImage.getxPosition(), powerImage.getyPosition(), paintbrush);
             canvas.drawRect(powerImage.getPowerImageHitbox(), paintbrush);
 
+
+            canvas.drawBitmap(gunImage.getGunImage(), gunImage.getxPosition(), gunImage.getyPosition(), paintbrush);
+            canvas.drawRect(gunImage.getHitbox(), paintbrush);
+
+
+
+
+
+
             // draw bullet on screen
             for (int i = 0; i < this.player.getBullets().size(); i++) {
                 Rect bullet = this.player.getBullets().get(i);
@@ -615,6 +625,8 @@ public class GameEngine extends SurfaceView implements Runnable {
             paintbrush.setColor(Color.RED);
             paintbrush.setTextSize(55);
             canvas.drawText("Lives Remaining: " + lives,this.screenWidth-550,80,paintbrush);
+
+            canvas.drawText("Time Elapsed: " + (int) Math.round(timeElapsed/6.5) + " Second",50,80,paintbrush);
 
             paintbrush.setStyle(Paint.Style.STROKE);
             paintbrush.setStrokeWidth(5);

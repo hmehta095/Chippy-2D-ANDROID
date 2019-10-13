@@ -14,6 +14,7 @@ public class Player {
     private Bitmap powerImage;
     private Rect hitbox;
     private Rect powerImageHitbox;
+    private Bitmap gunImage;
 
     public int xPosition;
     public int yPosition;
@@ -32,6 +33,9 @@ public class Player {
         // 2. Set the default image - all enemies have same image
         this.image = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_ship);
         this.powerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.life);
+
+        this.gunImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.gun);
+
 
         // 3. Set the default hitbox - all enemies have same hitbox
         this.hitbox = new Rect(
@@ -53,6 +57,14 @@ public class Player {
         this.yPosition = y;
         this.width = width;
         this.speed = speed;
+    }
+
+    public Bitmap getGunImage() {
+        return gunImage;
+    }
+
+    public void setGunImage(Bitmap gunImage) {
+        this.gunImage = gunImage;
     }
 
     public Rect getPowerImageHitbox() {
