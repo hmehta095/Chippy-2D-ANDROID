@@ -148,30 +148,30 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             if (i < 7)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + i * xVal, yVal);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 1900 + i * xVal, yVal);
             }
             if (i >=7 && i< 14 )
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 7) * xVal, yVal + 90);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 1900 + (i - 7) * xVal, yVal + 90);
             }
             if (i >=14 && i <= 21)
             {
                 if (i == 17)
                 {
-                    skull = new EnemyPixel(getContext(),2000 + (i - 14) * xVal, yVal + 180);
+                    skull = new EnemyPixel(getContext(),1900 + (i - 14) * xVal, yVal + 180);
                 }
 
-                    this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 14) * xVal, yVal + 180);
+                    this.enemyPixels[i] = new EnemyPixel(getContext(), 1900 + (i - 14) * xVal, yVal + 180);
 
 
             }
             if (i >=21 && i <= 28)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 21) * xVal, yVal + 270);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 1900 + (i - 21) * xVal, yVal + 270);
             }
             if (i >=28 && i <= enemyPixels.length)
             {
-                this.enemyPixels[i] = new EnemyPixel(getContext(), 2000 + (i - 28) * xVal, yVal + 350);
+                this.enemyPixels[i] = new EnemyPixel(getContext(), 1900 + (i - 28) * xVal, yVal + 350);
             }
         }
 
