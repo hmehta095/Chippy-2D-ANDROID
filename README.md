@@ -1,10 +1,5 @@
 # Chippy 
-```bash
-Group Details:
-      1. Simran Kaur Bal (C0-743319)
-      2. Himanshu Mehta (C0-744069)
-      3. Manjit Singh (C0-744018)
-```
+
 
 ## Description: 
 In this we have created a clone of ONE LEVEL of the Chippy game.
